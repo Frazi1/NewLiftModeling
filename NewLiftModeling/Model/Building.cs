@@ -38,7 +38,7 @@ namespace NewLiftModeling
 
         public Person SpawnPerson()
         {
-            int currentLevelNumber = 4 /*rnd.Next(0, Levels.Count)*/;
+            int currentLevelNumber =  rnd.Next(0, Levels.Count);
             int targetLevelNumber = 0;
             Level currentLevel = Levels.ElementAt<Level>(currentLevelNumber);
             Person p = new Person(PersonCounter++, this, currentLevel, targetLevelNumber);
@@ -51,6 +51,7 @@ namespace NewLiftModeling
             }
             if (PersonSpawned != null)
                 PersonSpawned(this, new PersonSpawnedEventArgs(p));
+            Lift.Move1();
             return p;
         }
 

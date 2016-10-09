@@ -40,7 +40,7 @@ namespace NewLiftModeling
 
         private void Lift_PersonMoved(object sender, PersonMovedEventArgs e)
         {
-            drawer.DrawPerson(e.Person);
+            drawer.MovePerson(e.Person);
         }
 
         private void Lift_LiftMoved(object sender, LiftMovedEventArgs e)

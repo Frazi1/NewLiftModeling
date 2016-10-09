@@ -19,15 +19,26 @@ namespace NewLiftModeling
             set
             {
                 levelsToVisit = value;
- 
+                //Move();
             }
         }
         public int Speed { get; set; } //Время, за которое лифт проезжает один(1) этаж 
         public int Capacity { get; set; }
-        public int TargetLevelNumber { get; set; }
+        public int TargetLevelNumber
+        {
+            get { return targetLevelNumber; }
+            set
+            {
+                targetLevelNumber = value;
+                //Move();
+            }
+        }
 
         private DispatcherTimer LiftTimer;
         private Queue<Level> levelsToVisit;
+        private int targetLevelNumber;
+        private int trasnportToLevelNumber;
+
         //
         //Constructors
         public Lift(Level startingLevel, List<Level> levels)
@@ -38,6 +49,13 @@ namespace NewLiftModeling
             Levels = levels;
             Speed = Settings.LIFT_SPEED;
             LevelsToVisit = new Queue<Level>();
+            targetLevelNumber = -1;
+
+            LiftTimer = new DispatcherTimer();
+            LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LIFT_SPEED);
+            LiftTimer.Tick += LiftTimer_Tick;
+            LiftTimer.Start();
+
         }
         public Lift()
         {
@@ -49,62 +67,70 @@ namespace NewLiftModeling
             LiftTimer = new DispatcherTimer();
             LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LIFT_SPEED);
             LiftTimer.Tick += LiftTimer_Tick;
-            LiftTimer.Start();
+            targetLevelNumber = -1;
+
         }
+        //public void Move()
+        //{
+        //    if (LevelsToVisit.Count != 0)
+        //    {
+        //        if (TargetLevelNumber == -1)
+        //            TargetLevelNumber = LevelsToVisit.Dequeue().LevelNumber;
+        //        MoveTo();
+        //        //LiftTimer.Stop();
+        //    }
 
+        //}
+        //public void MoveTo()
+        //{
+        //    if (TargetLevelNumber != -1)
+        //    {
+        //        if (CurrentLevel.LevelNumber < TargetLevelNumber)
+        //        {
+        //            this.CurrentLevel = Levels[CurrentLevel.LevelNumber + 1];
+        //        }
+        //        else if (CurrentLevel.LevelNumber > TargetLevelNumber)
+        //        {
+        //            this.CurrentLevel = Levels[CurrentLevel.LevelNumber - 1];
+        //            if (CurrentLevel.IsLiftSummonButtonPushed && People.Count < Capacity)
+        //                TakePeople();
+        //        }
+        //        else
+        //        {
+        //            if (CurrentLevel.LevelNumber == 0)
+        //                GetPeopleOut();
+        //            TargetLevelNumber = -1;
+        //        }
+        //        if (LiftMoved != null)
+        //            LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
+        //        foreach (Person p in People)
+        //            PersonMoved(this, new PersonMovedEventArgs(p));
+        //    }
+        //}
 
-        public void Move()
+        public void Move1()
         {
-
-            if (LevelsToVisit.Count != 0)
+            if (TargetLevelNumber == -1)
             {
-                TargetLevelNumber = LevelsToVisit.Dequeue().LevelNumber;
+                if (LevelsToVisit.Count != 0)
+                    TargetLevelNumber = LevelsToVisit.Dequeue().LevelNumber;
+
                 
-                //while (CurrentLevel.LevelNumber != TargetLevelNumber)
-                //{
-                    MoveTo(TargetLevelNumber);
-
-
-                //}
             }
-
-        }
-
-        public void MoveTo(int targetLevelNumber)
-        {
-
-            if (CurrentLevel.LevelNumber < targetLevelNumber)
-            {
-                while (CurrentLevel.LevelNumber != targetLevelNumber)
-                {
-                    this.CurrentLevel = Levels[CurrentLevel.LevelNumber + 1];
-                    if (LiftMoved != null)
-                        LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
-                }
-            }
-            else if (CurrentLevel.LevelNumber > targetLevelNumber)
-            {
-                while (CurrentLevel.LevelNumber != targetLevelNumber)
-                {
-                    this.CurrentLevel = Levels[CurrentLevel.LevelNumber - 1];
-                    if (LiftMoved != null)
-                        LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
-                    if (CurrentLevel.IsLiftSummonButtonPushed && People.Count < Capacity)
-                        TakePeople();
-                }
-            }
-
-
+            LiftTimer.Start();
         }
 
         private void TakePeople()
         {
-            Person p = CurrentLevel.Queue.Dequeue();
-            p.IsInLift = true;
-            p.QueueNumber = People.Count;
-            People.Add(p);
-            if (PersonMoved != null)
-                PersonMoved(this, new PersonMovedEventArgs(p));
+            while (CurrentLevel.Queue.Count > 0 && People.Count < Capacity)
+            {
+                Person p = CurrentLevel.Queue.Dequeue();
+                p.IsInLift = true;
+                p.QueueNumber = People.Count;
+                People.Add(p);
+                if (PersonMoved != null)
+                    PersonMoved(this, new PersonMovedEventArgs(p));
+            }
         }
         private void GetPeopleOut()
         {
@@ -114,14 +140,52 @@ namespace NewLiftModeling
             foreach (var p in PeopleToRemove)
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
-
         }
 
 
 
         private void LiftTimer_Tick(object sender, EventArgs e)
         {
-            Move();
+            //MoveTo();
+            if (TargetLevelNumber != -1)
+            {
+                if (CurrentLevel.LevelNumber < TargetLevelNumber)
+                {
+                    CurrentLevel.IsLiftPresent = false;
+                    CurrentLevel = Levels[CurrentLevel.LevelNumber + 1];
+                    CurrentLevel.IsLiftPresent = true;
+                    LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
+                    foreach (Person p in People)
+                        PersonMoved(this, new PersonMovedEventArgs(p));
+                }
+                else if (CurrentLevel.LevelNumber > TargetLevelNumber)
+                {
+                    CurrentLevel.IsLiftPresent = false;
+                    CurrentLevel = Levels[CurrentLevel.LevelNumber - 1];
+                    CurrentLevel.IsLiftPresent = true;
+                    LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
+                    for (int i = 0; i < People.Count; i++)
+                    {
+                        Person p = People[i];
+                        p.CurrentLevel = CurrentLevel;
+                        PersonMoved(this, new PersonMovedEventArgs(p));
+                    }
+                }
+                else if (CurrentLevel.LevelNumber == TargetLevelNumber)
+                {
+                    TakePeople();
+                    if (CurrentLevel.LevelNumber != 0)
+                    {
+                        TargetLevelNumber = trasnportToLevelNumber;
+                        Move1();
+                    }
+                    if (CurrentLevel.LevelNumber == 0)
+                    {
+                        GetPeopleOut();
+                        TargetLevelNumber = -1;
+                    }
+                }
+            }
         }
 
 

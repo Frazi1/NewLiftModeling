@@ -16,6 +16,7 @@ namespace NewLiftModeling
 
         public LiftModel LiftModel { get; set; }
         public List<LevelModel> LevelsModel { get; set; }
+        public List<PersonModel> PeopleModels { get; set; }
 
 
 
@@ -33,7 +34,7 @@ namespace NewLiftModeling
         {
             Canvas = canvas;
             Building = building;
-
+            PeopleModels = new List<PersonModel>();
 
             //
             LevelsModel = new List<LevelModel>();
@@ -86,7 +87,7 @@ namespace NewLiftModeling
         public void DrawPerson(Person person)
         {
             PersonModel personModel = new PersonModel(person);
-
+            PeopleModels.Add(personModel);
             SetPersonCoords(personModel);
 
             Ellipse el = new Ellipse();
@@ -128,7 +129,6 @@ namespace NewLiftModeling
 
         }
 
-
         //Анимация
         public void MoveLift()
         {
@@ -137,6 +137,14 @@ namespace NewLiftModeling
             //Rectangle lift = (Rectangle) Canvas.FindName("Lift");
             Canvas.SetTop(lift, LiftModel.Y);
             Canvas.SetLeft(lift, LiftModel.X);
+        }
+        public void MovePerson(Person p)
+        {
+            PersonModel pModel = PeopleModels.Find(e => e.Person == p);
+            SetPersonCoords(pModel);
+            var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person"+p.ID);
+            Canvas.SetTop(personCircle, pModel.Y);
+            Canvas.SetLeft(personCircle, pModel.X);
         }
     }
 
