@@ -53,6 +53,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Building.cs" />
+    <Compile Include="Model\Level.cs" />
+    <Compile Include="Model\Lift.cs" />
+    <Compile Include="Events\LiftMovedEventArgs.cs" />
+    <Compile Include="Model\Person.cs" />
+    <Compile Include="Events\PersonMovedEventArgs.cs" />
+    <Compile Include="Events\PersonSpawnedEventArgs.cs" />
+    <Compile Include="Settings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -61,12 +69,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Drawer\Drawer.cs" />
+    <Compile Include="Drawer\LevelModel.cs" />
+    <Compile Include="Drawer\LiftModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drawer\PersonModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -19,9 +19,49 @@ namespace NewLiftModeling
     /// </summary>
     public partial class MainWindow: Window
     {
+        Building building;
+        Drawer drawer;
         public MainWindow()
         {
             InitializeComponent();
+            building = new Building(5);
+            drawer = new Drawer(canvas1, building);
+
+
+            building.Lift.LiftMoved += Lift_LiftMoved;
+            building.Lift.PersonMoved += Lift_PersonMoved;
+            building.PersonSpawned += Building_PersonSpawned;
+        }
+
+        private void Building_PersonSpawned(object sender, PersonSpawnedEventArgs e)
+        {
+            drawer.DrawPerson(e.Person);
+        }
+
+        private void Lift_PersonMoved(object sender, PersonMovedEventArgs e)
+        {
+            drawer.DrawPerson(e.Person);
+        }
+
+        private void Lift_LiftMoved(object sender, LiftMovedEventArgs e)
+        {
+            drawer.MoveLift();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            Person p = building.SpawnPerson();
+            //building.Lift.Move();
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            drawer.DrawLevels();
+            drawer.DrawLift();
+
+
+
         }
     }
 }
