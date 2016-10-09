@@ -116,7 +116,7 @@ namespace NewLiftModeling
                 if (LevelsToVisit.Count != 0)
                     TargetLevelNumber = LevelsToVisit.Dequeue().LevelNumber;
 
-                
+
             }
             LiftTimer.Start();
         }
@@ -174,7 +174,11 @@ namespace NewLiftModeling
                         PersonMoved(this, new PersonMovedEventArgs(p));
                     }
                     if (CurrentLevel.LevelNumber != 0 && People.Count < Capacity)
+                    {
                         TakePeople();
+                        if(CurrentLevel.Queue.Count==0)
+                            LevelsToVisit.
+                    }
                 }
                 else if (CurrentLevel.LevelNumber == TargetLevelNumber)
                 {
@@ -190,6 +194,8 @@ namespace NewLiftModeling
                         TargetLevelNumber = -1;
                     }
                 }
+                if (ListChanged != null)
+                    ListChanged(this, new ListChangedEventArgs(LevelsToVisit));
             }
         }
 
@@ -201,14 +207,26 @@ namespace NewLiftModeling
         public event PersonMovedEventHandler PersonMoved;
 
 
+        public delegate void ListChangedEventHandler(object sender, ListChangedEventArgs e);
+        public event ListChangedEventHandler ListChanged;
+    } 
 
+    public class ListChangedEventArgs: EventArgs
+    {
+        public Queue<Level> List;
 
-
-
-
-
-
-
+        public ListChangedEventArgs(Queue<Level> list)
+        {
+            List = list;
+        }
     }
 
+
+
+
+
+
+
+
 }
+

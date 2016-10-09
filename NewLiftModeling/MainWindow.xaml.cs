@@ -31,6 +31,14 @@ namespace NewLiftModeling
             building.Lift.LiftMoved += Lift_LiftMoved;
             building.Lift.PersonMoved += Lift_PersonMoved;
             building.PersonSpawned += Building_PersonSpawned;
+            building.Lift.ListChanged += Lift_ListChanged;
+        }
+
+        private void Lift_ListChanged(object sender, ListChangedEventArgs e)
+        {
+           label.Content = "";
+            foreach (var v in e.List)
+                label.Content += v.LevelNumber.ToString() + " ";
         }
 
         private void Building_PersonSpawned(object sender, PersonSpawnedEventArgs e)
