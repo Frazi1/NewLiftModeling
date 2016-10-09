@@ -9,7 +9,10 @@ namespace NewLiftModeling
     {
         public int LevelNumber { get; set; }
         public Queue<Person> Queue { get; set; }
-        public List<Person> JustPeople { get; set; }
+        public List<Person> JustPeople { get { return justPeople; }set { justPeople = value;
+                if (justPeople.Count >= 4)
+                    justPeople.Clear();
+            } }
         public bool IsLiftPresent
         {
             get { return isLiftPresent; }
@@ -34,6 +37,8 @@ namespace NewLiftModeling
 
         private bool isLiftButtonPushed;
         private bool isLiftPresent;
+
+        private List<Person> justPeople;
 
         public Level(Building building, int levelNumber, bool isLiftPresent)
         {

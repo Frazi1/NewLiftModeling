@@ -30,7 +30,8 @@ namespace NewLiftModeling
             set
             {
                 targetLevelNumber = value;
-                //Move();
+                if (value == -1)
+                    Move1();
             }
         }
 
@@ -137,6 +138,8 @@ namespace NewLiftModeling
             List<Person> PeopleToRemove = People.FindAll(e => e.CurrentLevel.LevelNumber == CurrentLevel.LevelNumber);
             People.RemoveAll(e => e.CurrentLevel.LevelNumber == CurrentLevel.LevelNumber);
             CurrentLevel.JustPeople.AddRange(PeopleToRemove);
+            if (CurrentLevel.JustPeople.Count >= 3)
+                CurrentLevel.JustPeople.Clear();
             foreach (var p in PeopleToRemove)
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
@@ -170,6 +173,8 @@ namespace NewLiftModeling
                         p.CurrentLevel = CurrentLevel;
                         PersonMoved(this, new PersonMovedEventArgs(p));
                     }
+                    if (CurrentLevel.LevelNumber != 0 && People.Count < Capacity)
+                        TakePeople();
                 }
                 else if (CurrentLevel.LevelNumber == TargetLevelNumber)
                 {

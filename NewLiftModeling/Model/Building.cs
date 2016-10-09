@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 
 namespace NewLiftModeling
 {
@@ -12,8 +13,10 @@ namespace NewLiftModeling
         public List<Person> People { get; set; }
         public int PersonCounter { get; set; }
 
+        DispatcherTimer Timer;
         Random rnd = new Random();
 
+        private double spawinngCoef = 2;
 
         public Building(int levelsNumber)
         {
@@ -30,15 +33,27 @@ namespace NewLiftModeling
             Lift.Levels = Levels;
 
             People = new List<Person>();
-
+            Timer = new DispatcherTimer();
+            Timer.Interval = TimeSpan.FromSeconds(2);
+            Timer.Tick += Timer_Tick;
+            Timer.Start();
 
         }
 
-
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (rnd.NextDouble() < spawinngCoef)
+            {
+                SpawnPerson();
+                spawinngCoef /= 2;
+            }
+            else
+                spawinngCoef *= 2;
+        }
 
         public Person SpawnPerson()
         {
-            int currentLevelNumber =  rnd.Next(0, Levels.Count);
+            int currentLevelNumber =  rnd.Next(1, Levels.Count);
             int targetLevelNumber = 0;
             Level currentLevel = Levels.ElementAt<Level>(currentLevelNumber);
             Person p = new Person(PersonCounter++, this, currentLevel, targetLevelNumber);
