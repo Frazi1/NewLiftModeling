@@ -35,7 +35,7 @@ namespace NewLiftModeling
             set
             {
                 isLiftButtonPushed = value;
-                Lift.LevelsToVisit.Enqueue(this);
+                Lift.LevelsToVisit.Insert(Lift.LevelsToVisit.Count,this);
                
             }
         }

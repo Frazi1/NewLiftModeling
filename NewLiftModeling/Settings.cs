@@ -10,7 +10,7 @@ namespace NewLiftModeling
     public static class Settings
     {
         public static int LIFT_CAPACITY = 5;
-        public static int LIFT_SPEED = 1;
+        public static double LIFT_SPEED = 0.5;
         public static int LIFT_STARTING_LEVEL = 0;
         public static double LIFT_DOORS_OPEN_TIME = 3;
 

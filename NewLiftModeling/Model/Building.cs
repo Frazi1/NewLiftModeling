@@ -16,7 +16,7 @@ namespace NewLiftModeling
         DispatcherTimer Timer;
         Random rnd = new Random();
 
-        private double spawinngCoef = 2;
+        private double spawinngCoef = 200;
 
         public Building(int levelsNumber)
         {
@@ -42,13 +42,18 @@ namespace NewLiftModeling
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (rnd.NextDouble() < spawinngCoef)
+            int peopleNumber = rnd.Next(1, 7);
+            for (int i = 0; i < peopleNumber; i++)
             {
-                SpawnPerson();
-                spawinngCoef /= 2;
+
+                if (rnd.NextDouble() < spawinngCoef)
+                {
+                    SpawnPerson();
+                    spawinngCoef /= 2;
+                }
+                else
+                    spawinngCoef *= 2;
             }
-            else
-                spawinngCoef *= 2;
         }
 
         public Person SpawnPerson()

@@ -125,7 +125,13 @@ namespace NewLiftModeling
                 personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
                 personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber) + Settings.LIFT_WIDTH*1.5 + personModel.Person.QueueNumber*Settings.QUEUE_GAP;
             }
+            List<PersonModel> ToRemove = PeopleModels.FindAll(e => e.Person.CurrentLevel.LevelNumber == 0 && !e.Person.IsInLift);
+            foreach(var pm in ToRemove)
+            {
+                var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person" + pm.Person.ID);
+                PeopleModels.Remove(pm);
 
+            }
 
         }
 
@@ -142,7 +148,7 @@ namespace NewLiftModeling
         {
             PersonModel pModel = PeopleModels.Find(e => e.Person == p);
             SetPersonCoords(pModel);
-            var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person"+p.ID);
+            var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person" + pModel.Person.ID);
             Canvas.SetTop(personCircle, pModel.Y);
             Canvas.SetLeft(personCircle, pModel.X);
         }
