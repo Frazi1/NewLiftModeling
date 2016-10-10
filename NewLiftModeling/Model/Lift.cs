@@ -31,99 +31,51 @@ namespace NewLiftModeling
             {
                 targetLevelNumber = value;
                 if (value == -1)
-                    Move1();
+                    SelectNextLevel();
             }
         }
 
         private DispatcherTimer LiftTimer;
         private List<Level> levelsToVisit;
         private int targetLevelNumber;
-        private int trasnportToLevelNumber;
+        private int trasnportToLevelNumber=0;
 
         //
         //Constructors
         public Lift(Level startingLevel, List<Level> levels)
         {
             CurrentLevel = startingLevel;
-            Capacity = Settings.LIFT_CAPACITY;
+            Capacity = Settings.LiftCapacity;
             People = new List<Person>();
             Levels = levels;
-            Speed = Settings.LIFT_SPEED;
+            Speed = Settings.LiftSpeed;
             LevelsToVisit = new List<Level>();
             targetLevelNumber = -1;
 
             LiftTimer = new DispatcherTimer();
-            LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LIFT_SPEED);
+            LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LiftSpeed);
             LiftTimer.Tick += LiftTimer_Tick;
             LiftTimer.Start();
-
         }
         public Lift()
         {
-            Capacity = Settings.LIFT_CAPACITY;
+            Capacity = Settings.LiftCapacity;
             People = new List<Person>();
-            Speed = Settings.LIFT_SPEED;
+            Speed = Settings.LiftSpeed;
             LevelsToVisit = new List<Level>();
             targetLevelNumber = -1;
 
             LiftTimer = new DispatcherTimer();
-            LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LIFT_SPEED);
+            LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LiftSpeed);
             LiftTimer.Tick += LiftTimer_Tick;
-
-
+            LiftTimer.Start();
         }
-        //public void Move()
-        //{
-        //    if (LevelsToVisit.Count != 0)
-        //    {
-        //        if (TargetLevelNumber == -1)
-        //            TargetLevelNumber = LevelsToVisit.Dequeue().LevelNumber;
-        //        MoveTo();
-        //        //LiftTimer.Stop();
-        //    }
 
-        //}
-        //public void MoveTo()
-        //{
-        //    if (TargetLevelNumber != -1)
-        //    {
-        //        if (CurrentLevel.LevelNumber < TargetLevelNumber)
-        //        {
-        //            this.CurrentLevel = Levels[CurrentLevel.LevelNumber + 1];
-        //        }
-        //        else if (CurrentLevel.LevelNumber > TargetLevelNumber)
-        //        {
-        //            this.CurrentLevel = Levels[CurrentLevel.LevelNumber - 1];
-        //            if (CurrentLevel.IsLiftSummonButtonPushed && People.Count < Capacity)
-        //                TakePeople();
-        //        }
-        //        else
-        //        {
-        //            if (CurrentLevel.LevelNumber == 0)
-        //                GetPeopleOut();
-        //            TargetLevelNumber = -1;
-        //        }
-        //        if (LiftMoved != null)
-        //            LiftMoved(this, new LiftMovedEventArgs(CurrentLevel));
-        //        foreach (Person p in People)
-        //            PersonMoved(this, new PersonMovedEventArgs(p));
-        //    }
-        //}
-
-        public void Move1()
+        public void SelectNextLevel()
         {
             if (TargetLevelNumber == -1)
-            {
                 if (LevelsToVisit.Count != 0)
-                {
                     TargetLevelNumber = LevelsToVisit.First().LevelNumber;
-
-                    //LevelsToVisit.Remove(LevelsToVisit.First());
-                }
-
-
-            }
-            LiftTimer.Start();
         }
 
         private void TakePeople()
@@ -136,18 +88,21 @@ namespace NewLiftModeling
                 People.Add(p);
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
-                if (CurrentLevel.Queue.Count == 0)
-                        while (levelsToVisit.Contains(CurrentLevel))
-                            LevelsToVisit.Remove(CurrentLevel);
+            }
+            if (CurrentLevel.Queue.Count == 0)
+            {
+                while (levelsToVisit.Contains(CurrentLevel))
+                    LevelsToVisit.Remove(CurrentLevel);
+                CurrentLevel.IsLiftSummonButtonPushed = false;
             }
         }
-        private void GetPeopleOut()
+        private void DropPeople()
         {
             List<Person> PeopleToRemove = People.FindAll(e => e.CurrentLevel.LevelNumber == CurrentLevel.LevelNumber);
             People.RemoveAll(e => e.CurrentLevel.LevelNumber == CurrentLevel.LevelNumber);
-            CurrentLevel.JustPeople.AddRange(PeopleToRemove);
-            if (Levels[0].JustPeople.Count >= 3)
-                Levels[0].JustPeople.Clear();
+            //CurrentLevel.JustPeople.AddRange(PeopleToRemove);
+            //if (Levels[0].JustPeople.Count >= 3)
+            //    Levels[0].JustPeople.Clear();
             foreach (var p in PeopleToRemove)
             {
                 p.IsInLift = false;
@@ -160,7 +115,7 @@ namespace NewLiftModeling
 
         private void LiftTimer_Tick(object sender, EventArgs e)
         {
-            //MoveTo();
+            SelectNextLevel();
             if (TargetLevelNumber != -1)
             {
                 if (CurrentLevel.LevelNumber < TargetLevelNumber)
@@ -189,12 +144,7 @@ namespace NewLiftModeling
                         PersonMoved(this, new PersonMovedEventArgs(p));
                     }
                     if (CurrentLevel.LevelNumber != 0 && People.Count < Capacity)
-                    {
                         TakePeople();
-                        //if (CurrentLevel.Queue.Count == 0)
-                        //    while (levelsToVisit.Contains(CurrentLevel))
-                        //        LevelsToVisit.Remove(CurrentLevel);
-                    }
                 }
                 else if (CurrentLevel.LevelNumber == TargetLevelNumber)
                 {
@@ -202,11 +152,11 @@ namespace NewLiftModeling
                     if (CurrentLevel.LevelNumber != 0)
                     {
                         TargetLevelNumber = trasnportToLevelNumber;
-                        Move1();
+                        SelectNextLevel();
                     }
                     if (CurrentLevel.LevelNumber == 0)
                     {
-                        GetPeopleOut();
+                        DropPeople();
                         TargetLevelNumber = -1;
                     }
                 }

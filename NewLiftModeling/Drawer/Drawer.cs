@@ -50,7 +50,7 @@ namespace NewLiftModeling
         }
         public void DrawLevels()
         {
-            double y = Canvas.ActualHeight - Settings.MARGIN;
+            double y = Canvas.ActualHeight - Settings.Margin;
             for (int i = 0; i < LevelsModel.Count; i++)
             {
                 //foreach (LevelModel lvlm in LevelsModel)
@@ -79,11 +79,11 @@ namespace NewLiftModeling
             SetPersonCoords(personModel);
 
             Ellipse el = new Ellipse();
-            el.Width = Settings.PERSON_RADIUS;
-            el.Height = Settings.PERSON_RADIUS;
-            el.Stroke = new SolidColorBrush(Settings.PERSON_COLOR);
+            el.Width = Settings.PersonRadius;
+            el.Height = Settings.PersonRadius;
+            el.Stroke = new SolidColorBrush(Settings.PersonColor);
             el.StrokeThickness = 1;
-            el.Fill = new SolidColorBrush(Settings.PERSON_COLOR);
+            el.Fill = new SolidColorBrush(Settings.PersonColor);
             el.Name = "Person" + personModel.Person.ID;
             Canvas.Children.Add(el);
             Canvas.SetLeft(el, personModel.X);
@@ -94,8 +94,8 @@ namespace NewLiftModeling
         public void SetLiftCoords()
         {
             int currentLevel = LiftModel.Lift.CurrentLevel.LevelNumber;
-            double x = Settings.LEVEL_WIDTH + Settings.MARGIN / 2;
-            double y = Canvas.ActualHeight - (Settings.MARGIN + Settings.LIFT_HEIGTH + Settings.LEVEL_HEIGTH * currentLevel);
+            double x = Settings.LevelWidth + Settings.Margin / 2;
+            double y = Canvas.ActualHeight - (Settings.Margin + Settings.LiftHeigth + Settings.LevelHeigth * currentLevel);
             LiftModel.X = x;
             LiftModel.Y = y;
         }
@@ -110,17 +110,17 @@ namespace NewLiftModeling
                     Canvas.Children.Remove(personCircle);
                     return;
                 }
-                personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
+                personModel.Y = Canvas.ActualHeight - (Settings.Margin * 2 + Settings.LevelHeigth * (currentLevel));
                 //personModel.X = Settings.LEVEL_WIDTH;
-                personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber);
+                personModel.X = Settings.LevelWidth - (Settings.Margin * 2 + (Settings.QueueGap + Settings.PersonRadius) * personModel.Person.QueueNumber);
             }
             else
             {
 
 
 
-                personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
-                personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber) + Settings.LIFT_WIDTH + personModel.Person.QueueNumber*Settings.QUEUE_GAP;
+                personModel.Y = Canvas.ActualHeight - (Settings.Margin * 2 + Settings.LevelHeigth * (currentLevel));
+                personModel.X = Settings.LevelWidth - (Settings.Margin * 2 + (Settings.QueueGap + Settings.PersonRadius) * personModel.Person.QueueNumber) + Settings.LiftWidth + personModel.Person.QueueNumber*Settings.QueueGap;
             }
             List<PersonModel> ToRemove = PeopleModels.FindAll(e => e.Person.CurrentLevel.LevelNumber == 0 && !e.Person.IsInLift);
             foreach(var pm in ToRemove)

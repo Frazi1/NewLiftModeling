@@ -16,7 +16,7 @@ namespace NewLiftModeling
         public PersonModel(Person person)
         {
             Person = person;
-            Radius = Settings.PERSON_RADIUS;
+            Radius = Settings.PersonRadius;
         }
     }
 }

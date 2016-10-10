@@ -9,31 +9,31 @@ namespace NewLiftModeling
 {
     public static class Settings
     {
-        public static int LevelsNumber=7;
+        public static int LevelsNumber=6;
 
-        public static int LIFT_CAPACITY = 10;
-        public static double LIFT_SPEED = 0.5;
-        public static int LIFT_STARTING_LEVEL = 0;
-        public static double LIFT_DOORS_OPEN_TIME = 3;
+        public static int LiftCapacity = 5;
+        public static double LiftSpeed = 0.2;
+        public static int LiftStartingLevel = 0;
+        //public static double LIFT_DOORS_OPEN_TIME = 3;
 
 
-        public static double PERSON_RADIUS = 10;
+        public static double PersonRadius = 10;
 
-        public static double QUEUE_GAP = PERSON_RADIUS / 2;
+        public static double QueueGap = PersonRadius / 2;
 
         //Для рисования
-        public static double LIFT_HEIGTH = 75;
+        public static double LiftHeigth = 75;
         //public static double LIFT_WIDTH = 75;
-        public static double LIFT_WIDTH = LIFT_CAPACITY * 3 * QUEUE_GAP;
+        public static double LiftWidth = LiftCapacity * 3 * QueueGap;
 
-        public static double LEVEL_WIDTH = 350;
-        public static double LEVEL_HEIGTH = 75;
+        public static double LevelWidth = 350;
+        public static double LevelHeigth = 75;
 
-        public static double MARGIN = 10;
+        public static double Margin = 10;
 
 
         //Цвета
-        public static Color PERSON_COLOR = Colors.Blue;
+        public static Color PersonColor = Colors.Blue;
 
     }
 }
