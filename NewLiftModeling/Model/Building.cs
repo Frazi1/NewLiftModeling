@@ -71,7 +71,7 @@ namespace NewLiftModeling
             }
             if (PersonSpawned != null)
                 PersonSpawned(this, new PersonSpawnedEventArgs(p));
-            Lift.Move1();
+            //Lift.Move1();
             return p;
         }
 
