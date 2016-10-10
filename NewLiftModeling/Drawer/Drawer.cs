@@ -116,9 +116,6 @@ namespace NewLiftModeling
             }
             else
             {
-
-
-
                 personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
                 personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber) + Settings.LIFT_WIDTH + personModel.Person.QueueNumber*Settings.QUEUE_GAP;
             }

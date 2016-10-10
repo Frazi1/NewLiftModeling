@@ -95,8 +95,11 @@ namespace NewLiftModeling
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
                 if (CurrentLevel.Queue.Count == 0)
-                        while (levelsToVisit.Contains(CurrentLevel))
-                            LevelsToVisit.Remove(CurrentLevel);
+                {
+                    CurrentLevel.IsLiftSummonButtonPushed = false;
+                    while (levelsToVisit.Contains(CurrentLevel))
+                        LevelsToVisit.Remove(CurrentLevel);
+                }
             }
         }
         private void DropPeople()

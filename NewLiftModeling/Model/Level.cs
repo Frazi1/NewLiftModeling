@@ -9,7 +9,7 @@ namespace NewLiftModeling
     {
         public int LevelNumber { get; set; }
         public Queue<Person> Queue { get; set; }
-  
+
         public bool IsLiftPresent
         {
             get { return isLiftPresent; }
@@ -26,8 +26,9 @@ namespace NewLiftModeling
             set
             {
                 isLiftButtonPushed = value;
-                Lift.LevelsToVisit.Insert(Lift.LevelsToVisit.Count,this);
-               
+                if (value == true)
+                    Lift.LevelsToVisit.Insert(Lift.LevelsToVisit.Count, this);
+
             }
         }
         public Lift Lift { get; set; }
