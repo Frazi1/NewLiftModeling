@@ -22,8 +22,8 @@ namespace NewLiftModeling
         public LiftModel(Lift lift)
         {
             Lift = lift;
-            Width = Settings.LiftWidth;
-            Heigth = Settings.LiftHeigth;
+            Width = Settings.LIFT_WIDTH;
+            Heigth = Settings.LIFT_HEIGTH;
         }
 
     }

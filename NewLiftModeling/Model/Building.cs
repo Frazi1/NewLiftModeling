@@ -24,15 +24,12 @@ namespace NewLiftModeling
             Lift = new Lift();
 
             for (int i = 0; i < levelsNumber; i++)
-            {
                 Levels.Add(new Level(this, i, false));
-                Levels.ElementAt(i).Lift = Lift;
-            }
-            Levels.ElementAt(Settings.LiftStartingLevel).IsLiftPresent = true;
+            Levels.ElementAt<Level>(Settings.LIFT_STARTING_LEVEL).IsLiftPresent = true;
             for (int i = 0; i < levelsNumber; i++)
+                Levels.ElementAt<Level>(i).Lift = Lift;
 
-
-            Lift.CurrentLevel = Levels.ElementAt(Settings.LiftStartingLevel);
+            Lift.CurrentLevel = Levels.ElementAt<Level>(Settings.LIFT_STARTING_LEVEL);
             Lift.Levels = Levels;
 
             People = new List<Person>();
@@ -74,7 +71,7 @@ namespace NewLiftModeling
             }
             if (PersonSpawned != null)
                 PersonSpawned(this, new PersonSpawnedEventArgs(p));
-            Lift.SelectNextLevel();
+            Lift.Move1();
             return p;
         }
 

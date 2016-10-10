@@ -15,8 +15,8 @@ namespace NewLiftModeling
         public LevelModel(Level level)
         {
             Level = level;
-            Width = Settings.LevelWidth;
-            Heigth = Settings.LevelHeigth;
+            Width = Settings.LEVEL_WIDTH;
+            Heigth = Settings.LEVEL_HEIGTH;
         }
     }
 }

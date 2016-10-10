@@ -7,11 +7,10 @@
         mc:Ignorable="d"
         
         Title="MainWindow" Height="582.713" Width="652.527" Loaded="Window_Loaded" SizeChanged="Windows_SizeChanged">
-
-    <Grid>
+    <Canvas Name="canvas1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0">
+        <Rectangle Width="100" Height="100" Fill="Aqua" Stroke="Beige" />
+        <Button x:Name="button" Content="Button" Canvas.Left="183" Canvas.Top="31" Width="75" Click="button_Click"/>
         <Label x:Name="label_Doors" Content="Label" Canvas.Left="135" Canvas.Top="14"/>
-        <Button x:Name="button" Content="Button" VerticalAlignment="Top" HorizontalAlignment="Right" Canvas.Left="183" Canvas.Top="31" Width="75" Click="button_Click"/>
-        <Label x:Name="label" VerticalAlignment="Top" Content="Label" Canvas.Left="331" Canvas.Top="33" Width="165" Margin="472,23,8,0"/>
-        <Canvas x:Name="canvas1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0"/>
-    </Grid>
+        <Label x:Name="label" Content="Label" Canvas.Left="331" Canvas.Top="33" Width="165"/>
+    </Canvas>
 </Window>
