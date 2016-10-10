@@ -64,11 +64,12 @@ namespace NewLiftModeling
             People = new List<Person>();
             Speed = Settings.LIFT_SPEED;
             LevelsToVisit = new List<Level>();
+            targetLevelNumber = -1;
 
             LiftTimer = new DispatcherTimer();
             LiftTimer.Interval = TimeSpan.FromSeconds(Settings.LIFT_SPEED);
             LiftTimer.Tick += LiftTimer_Tick;
-            targetLevelNumber = -1;
+
 
         }
         //public void Move()
@@ -116,7 +117,8 @@ namespace NewLiftModeling
                 if (LevelsToVisit.Count != 0)
                 {
                     TargetLevelNumber = LevelsToVisit.First().LevelNumber;
-                    LevelsToVisit.Remove(LevelsToVisit.First());
+
+                    //LevelsToVisit.Remove(LevelsToVisit.First());
                 }
 
 
@@ -135,7 +137,8 @@ namespace NewLiftModeling
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
                 if (CurrentLevel.Queue.Count == 0)
-                    LevelsToVisit.Remove(CurrentLevel);
+                        while (levelsToVisit.Contains(CurrentLevel))
+                            LevelsToVisit.Remove(CurrentLevel);
             }
         }
         private void GetPeopleOut()
@@ -146,8 +149,11 @@ namespace NewLiftModeling
             if (Levels[0].JustPeople.Count >= 3)
                 Levels[0].JustPeople.Clear();
             foreach (var p in PeopleToRemove)
+            {
+                p.IsInLift = false;
                 if (PersonMoved != null)
                     PersonMoved(this, new PersonMovedEventArgs(p));
+            }
         }
 
 
@@ -185,8 +191,9 @@ namespace NewLiftModeling
                     if (CurrentLevel.LevelNumber != 0 && People.Count < Capacity)
                     {
                         TakePeople();
-                        if (CurrentLevel.Queue.Count == 0)
-                            LevelsToVisit.Remove(CurrentLevel);
+                        //if (CurrentLevel.Queue.Count == 0)
+                        //    while (levelsToVisit.Contains(CurrentLevel))
+                        //        LevelsToVisit.Remove(CurrentLevel);
                     }
                 }
                 else if (CurrentLevel.LevelNumber == TargetLevelNumber)
@@ -218,7 +225,7 @@ namespace NewLiftModeling
 
         public delegate void ListChangedEventHandler(object sender, ListChangedEventArgs e);
         public event ListChangedEventHandler ListChanged;
-    } 
+    }
 
     public class ListChangedEventArgs: EventArgs
     {

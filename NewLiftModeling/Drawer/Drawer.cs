@@ -18,18 +18,6 @@ namespace NewLiftModeling
         public List<LevelModel> LevelsModel { get; set; }
         public List<PersonModel> PeopleModels { get; set; }
 
-
-
-
-
-
-
-
-
-
-
-
-
         public Drawer(Canvas canvas, Building building)
         {
             Canvas = canvas;
@@ -62,7 +50,7 @@ namespace NewLiftModeling
         }
         public void DrawLevels()
         {
-            double y = Canvas.ActualHeight - 10;
+            double y = Canvas.ActualHeight - Settings.MARGIN;
             for (int i = 0; i < LevelsModel.Count; i++)
             {
                 //foreach (LevelModel lvlm in LevelsModel)
@@ -116,14 +104,23 @@ namespace NewLiftModeling
             int currentLevel = personModel.Person.CurrentLevel.LevelNumber;
             if (!personModel.Person.IsInLift)
             {
+                if (personModel.Person.CurrentLevel.LevelNumber == 0)
+                {
+                    var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person" + personModel.Person.ID);
+                    Canvas.Children.Remove(personCircle);
+                    return;
+                }
                 personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
                 //personModel.X = Settings.LEVEL_WIDTH;
                 personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber);
             }
             else
             {
+
+
+
                 personModel.Y = Canvas.ActualHeight - (Settings.MARGIN * 2 + Settings.LEVEL_HEIGTH * (currentLevel));
-                personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber) + Settings.LIFT_WIDTH*1.5 + personModel.Person.QueueNumber*Settings.QUEUE_GAP;
+                personModel.X = Settings.LEVEL_WIDTH - (Settings.MARGIN * 2 + (Settings.QUEUE_GAP + Settings.PERSON_RADIUS) * personModel.Person.QueueNumber) + Settings.LIFT_WIDTH + personModel.Person.QueueNumber*Settings.QUEUE_GAP;
             }
             List<PersonModel> ToRemove = PeopleModels.FindAll(e => e.Person.CurrentLevel.LevelNumber == 0 && !e.Person.IsInLift);
             foreach(var pm in ToRemove)
@@ -149,8 +146,11 @@ namespace NewLiftModeling
             PersonModel pModel = PeopleModels.Find(e => e.Person == p);
             SetPersonCoords(pModel);
             var personCircle = (Ellipse)LogicalTreeHelper.FindLogicalNode(Canvas, "Person" + pModel.Person.ID);
-            Canvas.SetTop(personCircle, pModel.Y);
-            Canvas.SetLeft(personCircle, pModel.X);
+            if (personCircle != null)
+            {
+                Canvas.SetTop(personCircle, pModel.Y);
+                Canvas.SetLeft(personCircle, pModel.X);
+            }
         }
     }
 

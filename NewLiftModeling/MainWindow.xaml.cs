@@ -24,7 +24,7 @@ namespace NewLiftModeling
         public MainWindow()
         {
             InitializeComponent();
-            building = new Building(5);
+            building = new Building(Settings.LevelsNumber);
             drawer = new Drawer(canvas1, building);
 
 
@@ -32,6 +32,18 @@ namespace NewLiftModeling
             building.Lift.PersonMoved += Lift_PersonMoved;
             building.PersonSpawned += Building_PersonSpawned;
             building.Lift.ListChanged += Lift_ListChanged;
+
+
+        }
+        private void Windows_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            canvas1.Children.Clear();
+            if (canvas1.Children.Count == 0)
+            {
+
+                drawer.DrawLevels();
+                drawer.DrawLift();
+            }
         }
 
         private void Lift_ListChanged(object sender, ListChangedEventArgs e)
@@ -65,8 +77,8 @@ namespace NewLiftModeling
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            drawer.DrawLevels();
-            drawer.DrawLift();
+            //drawer.DrawLevels();
+            //drawer.DrawLift();
 
 
 
